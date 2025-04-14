@@ -3,34 +3,37 @@
 
 #include <string>
 
-template <class T> 
+template <class T>
 class generic_input
 {
 private:
     std::string key;
     T value;
+
 public:
-    generic_input(){};
+    generic_input() {};
 
     generic_input(std::string key, T value);
     ~generic_input();
-    
 
-    std::string get_key(){
+    std::string get_key() const
+    {
         return key;
     }
-    T get_value(){
+    T get_value() const
+    {
         return value;
     }
 
-    void set_key(std::string key){
+    void set_key(std::string key)
+    {
         this->key = key;
     }
-    void set_value(T value){
+    void set_value(T value)
+    {
         this->value = value;
     }
 };
-
 
 template <class T>
 generic_input<T>::generic_input(std::string key, T value)

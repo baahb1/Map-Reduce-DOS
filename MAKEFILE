@@ -1,8 +1,0 @@
-all				: driver
-
-driver			:
-					g++ driver.cpp -o driver.exe
-
-run				:
-					g++ driver.cpp -o driver.exe
-					.\driver.exe
