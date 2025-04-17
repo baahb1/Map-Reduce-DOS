@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <sstream>
+#include<unordered_map>
 
-extern std::vector<std::pair<std::string, int>> intermediate;
+extern std::unordered_map<std::string, std::vector<int>> intermediate;
 extern std::mutex emit_mutex;
 
 void map(const generic_input<std::string>& document);

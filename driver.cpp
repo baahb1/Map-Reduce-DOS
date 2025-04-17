@@ -7,21 +7,23 @@
 #include <thread>
 #include <unordered_map>
 #include <chrono>
+#include <cmath>
 
 int main() {
-    int num_nodes = 6;
+    int num_nodes = 15;
     generic_input<std::string> base_doc("doc.txt",
-        "hello this is a document this is another document hello world hello");
+        "hello this is a document this is another document hello world hello ");
 
     
 
     std::string temp_string = "";
-    for (int i = 0; i < 10000; i++)
-    {
-        temp_string += "word";
-        temp_string += "hello";
-        temp_string += "third";
-        temp_string += "document";
+    for (int i = 0; i < 10000; i++) {
+        temp_string += "word ";
+        temp_string += "hello ";
+        temp_string += "third ";
+        temp_string += "document ";
+        temp_string += "class ";
+        temp_string += "strings ";
     }
 
     generic_input<std::string> secondary_doc("doc.txt",temp_string);
@@ -32,8 +34,7 @@ int main() {
     }
     */
 
-    for (int i = 0; i < 90; ++i)
-    {
+    for (int i = 0; i < 90; ++i) {
         documents.push_back(secondary_doc);
     }
     
@@ -48,32 +49,58 @@ int main() {
         t.join();
     }threads.clear();
     
-
-    std::unordered_map<std::string, std::vector<int>> grouped;
-    for (const auto& [key, value] : intermediate) {
-        grouped[key].push_back(value);
-    }
-
     std::unordered_map<std::string, std::vector<int>> sub_group;
-    for (auto iterator = grouped.begin(); iterator != grouped.end(); iterator ++){
+    int intermediate_size = 0;
+    for (auto i : intermediate) {
+        intermediate_size += i.second.size();
+    }
+    
+    float num_per_node = intermediate_size / num_nodes;
+    int int_per_node = ::floor(num_per_node);
+    int counter = 0;
+    if (int_per_node < 1) {
+        int_per_node = 1;
+    }
+    std::vector<int> temp;
+    for (const auto& [key, value] : intermediate) {
         
-        sub_group[iterator->first] = iterator->second;
+        counter += value.size();
+        if (counter >= int_per_node){
+            int over = counter - value.size();
+            std::vector<int> temp = value;
+            sub_group[key].resize(over + 1);
+            copy(temp.begin(), temp.begin() + over + 1, sub_group[key].begin());
+            threads.emplace_back(reduce,sub_group);
+            counter = value.size() - over;
+            sub_group.clear();
+            copy(temp.begin() + over, temp.end(), std::back_inserter(sub_group[key]));
+            
+        }
+        else{
+        sub_group[key] = value;
+        }
+    }
+    if (counter > 0) {
         threads.emplace_back(reduce,sub_group);
-        sub_group.clear();
     }
 
     for (auto& t : threads) {
         t.join();
-    }threads.clear();
+    }
+    threads.clear();
     
     auto stop_MR = std::chrono::high_resolution_clock::now();
-    //auto final_result = reduce(grouped);
 
     auto MR_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_MR - start_MR);
 
-    for (const auto& [word, count] : get_word_count()) {
+    /*for (const auto& [word, count] : get_word_count()) {
         //std::cout << word << ": " << count << std::endl;
     }
+    */
+    for (const auto& [word, count] : word_count) {
+        std::cout << word << ": " << count << std::endl;
+    }
+    
 
     
     auto start_BF = std::chrono::high_resolution_clock::now();

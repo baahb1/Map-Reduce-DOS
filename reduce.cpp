@@ -20,10 +20,6 @@ void reduce(const std::unordered_map<std::string, std::vector<int>>& intermediat
     for (const auto& [key, values] : intermediate_set) {
         int sum = 0;
         for (int v : values) sum += v;
-        result[key] = sum;
-    }
-    for (auto& [key, value] : result)
-    {
-        word_count[key] = value;
+        word_count[key] = sum;
     }
 }
