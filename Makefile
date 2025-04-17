@@ -3,8 +3,8 @@ CXXFLAGS = -std=c++17 -pthread
 
 all: driver
 
-driver: driver.cpp map.cpp reduce.cpp
-	$(CXX) $(CXXFLAGS) driver.cpp map.cpp reduce.cpp -o driver.out
+driver: driver.cpp map.cpp reduce.cpp bruteforce.cpp
+	$(CXX) $(CXXFLAGS) driver.cpp map.cpp reduce.cpp bruteforce.cpp -o driver.out
 
 run: driver
 	./driver.out
