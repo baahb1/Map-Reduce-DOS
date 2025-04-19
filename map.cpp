@@ -1,18 +1,21 @@
 #include "map.h"
-#include <sstream>
 
-std::vector<std::pair<std::string, int>> intermediate;
+std::unordered_map<std::string, std::vector<int>> intermediate;
 std::mutex emit_mutex;
 
+//example map program for the word count example
 void map(const generic_input<std::string>& document) {
-    std::vector<std::pair<std::string, int>> local_pairs;
+    std::unordered_map<std::string, std::vector<int>> local_pairs;
     std::stringstream ss(document.get_value());
     std::string word;
 
     while (ss >> word) {
-        local_pairs.emplace_back(word, 1);
+        local_pairs[word].emplace_back(1);
     }
 
     std::lock_guard<std::mutex> lock(emit_mutex);
-    intermediate.insert(intermediate.end(), local_pairs.begin(), local_pairs.end());
+    for (const auto& [key, value] : local_pairs)
+    {
+        intermediate[key].insert(intermediate[key].end(), local_pairs[key].begin(), local_pairs[key].end());
+    }
 }

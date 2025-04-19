@@ -1,11 +1,13 @@
 #include "reduce.h"
+//example reduce program for the word count example
+std::unordered_map<std::string, int> word_count;
+std::unordered_map<std::string, int> get_word_count(){return word_count;}
 
-std::unordered_map<std::string, int> reduce(const std::unordered_map<std::string, std::vector<int>>& grouped) {
+void reduce(const std::unordered_map<std::string, std::vector<int>>& intermediate_set) {
     std::unordered_map<std::string, int> result;
-    for (const auto& [key, values] : grouped) {
+    for (const auto& [key, values] : intermediate_set) {
         int sum = 0;
         for (int v : values) sum += v;
-        result[key] = sum;
+        word_count[key] = sum;
     }
-    return result;
 }

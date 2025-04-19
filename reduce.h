@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
-std::unordered_map<std::string, int> reduce(const std::unordered_map<std::string, std::vector<int>>& grouped);
+extern std::unordered_map<std::string, int> word_count;
+std::unordered_map<std::string, int> get_word_count();
+void reduce(const std::unordered_map<std::string, std::vector<int>>& grouped);
 
 #endif
