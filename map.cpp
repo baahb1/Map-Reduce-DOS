@@ -1,9 +1,9 @@
 #include "map.h"
 
-
 std::unordered_map<std::string, std::vector<int>> intermediate;
 std::mutex emit_mutex;
 
+//example map program for the word count example
 void map(const generic_input<std::string>& document) {
     std::unordered_map<std::string, std::vector<int>> local_pairs;
     std::stringstream ss(document.get_value());
@@ -18,6 +18,4 @@ void map(const generic_input<std::string>& document) {
     {
         intermediate[key].insert(intermediate[key].end(), local_pairs[key].begin(), local_pairs[key].end());
     }
-    
-    
 }
